@@ -30,7 +30,7 @@ app.prepare().then(() => {
   });
 
   server.listen(3000, () => {
-    console.log("> Ready on http://localhost:3000");
+    console.log("> Ready on https://chat-box-app-imqn.vercel.app/:3000");
   });
 });
 /*
