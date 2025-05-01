@@ -10,7 +10,7 @@ const server = createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "https://chat-box-app-imqn.vercel.app", // ✅ your frontend domain
+    origin: "https://chat-box-app-imqn.vercel.app/:5000", // ✅ your frontend domain
     methods: ["GET", "POST"]
   }
 });
