@@ -1,70 +1,33 @@
 import { createServer } from "http";
-import { parse } from "url";
-import next from "next";
-import { Server as SocketIOServer } from "socket.io";
+import express from "express";
+import { Server } from "socket.io";
+import cors from "cors";
 
-const dev = process.env.NODE_ENV !== "production";
-const app = next({ dev });
-const handle = app.getRequestHandler();
+const app = express();
+app.use(cors());
 
-app.prepare().then(() => {
-  const server = createServer((req, res) => {
-    const parsedUrl = parse(req.url, true);
-    handle(req, res, parsedUrl);
+const server = createServer(app);
+
+const io = new Server(server, {
+  cors: {
+    origin: "https://chat-box-app-imqn.vercel.app", // ✅ your frontend domain
+    methods: ["GET", "POST"]
+  }
+});
+
+io.on("connection", (socket) => {
+  console.log("User connected:", socket.id);
+
+  socket.on("send_message", (data) => {
+    // ✅ broadcast to all clients *except* the sender
+    socket.broadcast.emit("receive_message", data);
   });
 
-  const io = new SocketIOServer(server);
-
-  io.on("connection", (socket) => {
-    console.log("User connected:", socket.id);
-
-    // Listening for a message from a client and sending it to all clients
-    socket.on("send_message", (data) => {
-      // This will send the message to all connected clients
-      io.emit("receive_message", data);  // Change from socket.broadcast.emit
-    });
-
-    socket.on("disconnect", () => {
-      console.log("User disconnected:", socket.id);
-    });
-  });
-
-  server.listen(3000, () => {
-    console.log("> Ready on https://chat-box-app-imqn.vercel.app/:3000");
+  socket.on("disconnect", () => {
+    console.log("User disconnected:", socket.id);
   });
 });
-/*
-import { createServer } from "http";
-import { parse } from "url";
-import next from "next";
-import { Server as SocketIOServer } from "socket.io";
 
-const dev = process.env.NODE_ENV !== "production";
-const app = next({ dev });
-const handle = app.getRequestHandler();
-
-app.prepare().then(() => {
-  const server = createServer((req, res) => {
-    const parsedUrl = parse(req.url, true);
-    handle(req, res, parsedUrl);
-  });
-
-  const io = new SocketIOServer(server);
-
-  io.on("connection", (socket) => {
-    console.log("User connected:", socket.id);
-
-    socket.on("send_message", (data) => {
-      socket.broadcast.emit("receive_message", data);
-    });
-
-    socket.on("disconnect", () => {
-      console.log("User disconnected:", socket.id);
-    });
-  });
-
-  server.listen(3000, () => {
-    console.log("> Ready on http://localhost:3000");
-  });
+server.listen(3000, () => {
+  console.log("Socket.IO server running on port 3000");
 });
-*/
