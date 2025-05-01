@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
-const socket = io("https://chat-box-app-imqn.vercel.app/:3000"); 
+const socket = io("https://chat-backend-g9v3.onrender.com"); 
 
 export default function Home() {
   const [message, setMessage] = useState("");
