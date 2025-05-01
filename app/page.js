@@ -22,7 +22,6 @@ export default function Home() {
   const sendMessage = () => {
     if (!message) return;
     socket.emit("send_message", message);
-    setMessages((prev) => [...prev, message]);
     setMessage("");
   };
   return (
