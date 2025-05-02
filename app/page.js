@@ -24,9 +24,11 @@ export default function Home() {
   
     document.addEventListener("keydown", handleKeyDown);
   
-    socket.on("receive_message", (data) => {
+    const handleReceiveMessage = (data) => {
       setMessages((prev) => [...prev, data]);
-    });
+    };
+  
+    socket.on("receive_message", handleReceiveMessage);
 
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
