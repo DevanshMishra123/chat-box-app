@@ -44,23 +44,30 @@ export default function Home() {
     setMessage("");
   };
   return (
-    <div  className="w-[70vw] m-auto border border-black rounded-2xl">
-      <div className="h-[65vh] bg-blue-100">
-        {messages.map((msg, idx) => (
-          <div key={idx}>{msg}</div>
-        ))}
-      </div>
-      <div className="flex gap-3">
-        <Input
-          id="name"
-          type="text"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}  
-          placeholder="Enter your message"
-          className="border p-2 rounded"  
-        />
-        <Button onClick={sendMessage}>Send</Button>
+    <div className="bg-[url('/ChatGPT Image May 3, 2025, 02_35_50 AM.png')] bg-cover bg-center h-screen w-screen flex items-center justify-center">
+      <div className="w-[70vw] h-[80vh] bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 shadow-lg flex flex-col overflow-hidden">
+        <div className="flex-1 overflow-y-auto p-4 space-y-2">
+          {messages.map((msg, idx) => (
+            <div
+              key={idx}
+              className="bg-white/20 backdrop-blur-sm text-white p-2 rounded-md max-w-[80%]"
+            >
+              {msg}
+            </div>
+          ))}
+        </div>
+        <div className="flex items-center gap-3 p-4 border-t border-white/10 bg-white/5 backdrop-blur-sm">
+          <Input
+            id="name"
+            type="text"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="Enter your message"
+            className="flex-1 text-white bg-white/10 backdrop-blur-md placeholder-white/50"
+          />
+          <Button onClick={sendMessage}>Send</Button>
+        </div>
       </div>
     </div>
-  );
+  );  
 }
