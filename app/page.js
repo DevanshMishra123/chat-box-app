@@ -12,11 +12,25 @@ export default function Home() {
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
+    const handleKeyDown = (e) => {
+      console.log("key pressed",e.key)
+      if (e.key === "Enter") {
+        if (!message) return;
+        socket.emit("send_message", message);
+        setMessage("");
+      }
+    };
+  
+    document.addEventListener("keydown", handleKeyDown);
+  
     socket.on("receive_message", (data) => {
       setMessages((prev) => [...prev, data]);
     });
 
-    return () => socket.off("receive_message");
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      socket.off("receive_message", handleReceiveMessage);
+    };
   }, []);
 
   const sendMessage = () => {
@@ -39,13 +53,6 @@ export default function Home() {
           onChange={(e) => setMessage(e.target.value)}  
           placeholder="Enter your message"
           className="border p-2 rounded"  
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              if (!message) return;
-              socket.emit("send_message", message);
-              setMessage("");
-            }
-          }}
         />
         <Button onClick={sendMessage}>Send</Button>
       </div>
