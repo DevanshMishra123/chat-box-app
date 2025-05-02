@@ -11,13 +11,11 @@ export default function Home() {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
 
-  const messageRef = useRef("");
-
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === "Enter") {
-        if (!messageRef.current) return;
-        socket.emit("send_message", messageRef.current);
+        if (!message) return;
+        socket.emit("send_message", message);
         setMessage("");
       }
     };
