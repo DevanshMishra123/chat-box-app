@@ -40,7 +40,7 @@ export default function Home() {
     setMessage("");
   };
   return (
-    <div className="bg-[url('/chat-bg.png')] bg-cover bg-center h-screen w-screen flex items-center justify-center">
+    <div>
       <div className="w-[70vw] h-[80vh] bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 shadow-lg flex flex-col overflow-hidden">
         <div className="flex-1 overflow-y-auto p-4 space-y-2">
           {messages.map((msg, idx) => (
