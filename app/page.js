@@ -12,6 +12,14 @@ export default function Home() {
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        if (!message) return;
+          socket.emit("send_message", message);
+        setMessage("");
+      }
+    });
+
     socket.on("receive_message", (data) => {
       setMessages((prev) => [...prev, data]);
     });
