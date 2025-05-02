@@ -11,12 +11,13 @@ export default function Home() {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
 
+  const messageRef = useRef("");
+
   useEffect(() => {
     const handleKeyDown = (e) => {
-      console.log("key pressed",e.key)
       if (e.key === "Enter") {
-        if (!message) return;
-        socket.emit("send_message", message);
+        if (!messageRef.current) return;
+        socket.emit("send_message", messageRef.current);
         setMessage("");
       }
     };
@@ -32,6 +33,10 @@ export default function Home() {
       socket.off("receive_message", handleReceiveMessage);
     };
   }, []);
+
+  useEffect(() => {
+    messageRef.current = message;
+  }, [message]);
 
   const sendMessage = () => {
     if (!message) return;
