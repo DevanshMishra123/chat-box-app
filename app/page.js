@@ -48,9 +48,15 @@ export default function Home() {
           {messages.map((msg, idx) => (
             <div
               key={idx}
-              className={`w-full flex ${msg.type ? "justify-start" : "justify-end"}`}
+              className={`w-full flex ${
+                msg.type === 0 ? "justify-end" : "justify-start"
+              }`}
             >
-              <div className="bg-white/20 backdrop-blur-sm text-white p-2 rounded-md max-w-[80%]">
+              <div
+                className={`p-2 rounded-md max-w-[80%] text-white ${
+                  msg.type === 0 ? "bg-blue-500" : "bg-gray-500"
+                }`}
+              >
                 <p>{msg.message}</p>
               </div>
             </div>
