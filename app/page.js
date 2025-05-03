@@ -12,6 +12,7 @@ export default function Home() {
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
+    console.log("connected to app");
     const handleKeyDown = (e) => {
       if (e.key === "Enter") {
         if (!message) return;
