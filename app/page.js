@@ -51,7 +51,7 @@ export default function Home() {
               key={idx}
               className="bg-white/20 flex flex-start backdrop-blur-sm text-white p-2 rounded-md max-w-[80%]"
             >
-              <p>{msg.message}</p>
+              <p>{msg.message+"good"}</p>
             </div>)
             :(<div
               key={idx}
