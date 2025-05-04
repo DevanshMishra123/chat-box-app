@@ -37,6 +37,7 @@ export async function POST(req) {
       { status: 201 }
     );
   } catch (error) {
+    console.error('Error creating user:', error);
     return NextResponse.json(
       { message: "Something went wrong" },
       { status: 500 }
