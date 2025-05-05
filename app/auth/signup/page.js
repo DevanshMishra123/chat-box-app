@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from 'next/link';
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -74,9 +75,9 @@ export default function SignUpPage() {
         </form>
         <p className="mt-4 text-center text-sm">
           Already have an account?{" "}
-          <a href="/" className="text-indigo-600 hover:underline">
+          <Link href="/" className="text-indigo-600 hover:underline">
             Sign In
-          </a>
+          </Link>
         </p>
       </div>
     </div>

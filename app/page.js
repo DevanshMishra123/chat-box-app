@@ -3,6 +3,7 @@
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from 'next/link';
 
 export default function SignInPage() {
   const router = useRouter();
@@ -80,9 +81,9 @@ export default function SignInPage() {
         </form>
         <p className="mt-4 text-center text-sm">
           Haven't created an account?{" "}
-          <a href="/auth/signup" className="text-indigo-600 hover:underline">
+          <Link href="/auth/signup" className="text-indigo-600 hover:underline">
             Sign Up
-          </a>
+          </Link>
         </p>
       </div>
     </div>
