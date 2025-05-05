@@ -14,13 +14,11 @@ export const authOptions = {
       async authorize(credentials) {
         const client = await clientPromise;
         const usersCollection = client.db().collection("users");
-
         const user = await usersCollection.findOne({ email: credentials.email });
 
         if (!user) return null;
 
         const isValid = await compare(credentials.password, user.password);
-
         if (!isValid) return null;
 
         return { id: user._id.toString(), email: user.email };
@@ -28,13 +26,23 @@ export const authOptions = {
     }),
   ],
   pages: {
-    signIn: "/", 
+    signIn: "/",
   },
   session: {
-    strategy: "jwt", 
+    strategy: "jwt",
   },
-  secret: process.env.NEXTAUTH_SECRET, 
+  secret: process.env.NEXTAUTH_SECRET,
+  callbacks: {
+    async redirect({ url, baseUrl }) {
+      if (url.startsWith(baseUrl)) {
+        return url;
+      } else {
+        return baseUrl; 
+      }
+    },
+  },
 };
+
 
 const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };

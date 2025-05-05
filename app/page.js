@@ -23,13 +23,14 @@ export default function SignInPage() {
         redirect: false,
         email,
         password,
+        callbackUrl: "/dashboard"
       });
 
       if (res?.error) {
         setError(res.error || "Invalid credentials");
       } else {
         console.log("login successful");
-        router.replace("/dashboard"); 
+        window.location.href = '/dashboard'
       }
     } catch (err) {
       setError("An unexpected error occurred. Please try again later.");
