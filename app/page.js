@@ -80,7 +80,7 @@ export default function SignInPage() {
           </button>
         </form>
         <p className="mt-4 text-center text-sm">
-          Haven't created an account?{" "}
+          Haven&apos;t created an account?{" "}
           <Link href="/auth/signup" className="text-indigo-600 hover:underline">
             Sign Up
           </Link>
