@@ -1,79 +1,89 @@
 "use client";
-import { useEffect, useState, useRef } from "react";
-import { io } from "socket.io-client";
-import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 
-const socket = io("https://chat-backend-g9v3.onrender.com");
+import { signIn } from "next-auth/react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
-export default function Home() {
-  const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState([]);
+export default function SignInPage() {
+  const router = useRouter();
 
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === "Enter") {
-        if (!message) return;
-        socket.emit("send_message", message);
-        setMessages((prev) => [...prev, { message: message, type: 0 }]);
-        setMessage("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    try {
+      const res = await signIn("credentials", {
+        redirect: false,
+        email,
+        password,
+      });
+
+      if (res?.error) {
+        setError(res.error || "Invalid credentials");
+      } else {
+        console.log("login successful");
+        router.replace("/dashboard"); 
       }
-    };
-
-    document.addEventListener("keydown", handleKeyDown);
-
-    const handleReceiveMessage = (data) => {
-      setMessages((prev) => [...prev, { message: data, type: 1 }]);
-    };
-
-    socket.on("receive_message", handleReceiveMessage);
-
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-      socket.off("receive_message", handleReceiveMessage);
-    };
-  }, []);
-
-  const sendMessage = () => {
-    console.log("message sent");
-    if (!message) return;
-    socket.emit("send_message", message);
-    setMessages((prev) => [...prev, { message: message, type: 0 }]);
-    setMessage("");
+    } catch (err) {
+      setError("An unexpected error occurred. Please try again later.");
+      console.error("Login error:", err);
+    } finally {
+      setLoading(false);
+    }
   };
+
   return (
-    <div className="bg-[url('/chat-bg.png')] bg-cover bg-center h-screen w-screen flex items-center justify-center">
-      <div className="w-[70vw] h-[80vh] bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 shadow-lg flex flex-col overflow-hidden">
-        <div className="flex-1 overflow-y-auto p-4 space-y-2">
-          {messages.map((msg, idx) => (
-            <div
-              key={idx}
-              className={`w-full flex ${
-                msg.type === 0 ? "justify-end" : "justify-start"
-              }`}
-            >
-              <div
-                className={`p-2 rounded-md max-w-[80%] text-white ${
-                  msg.type === 0 ? "bg-blue-500" : "bg-gray-500"
-                }`}
-              >
-                <p>{msg.message}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="flex items-center gap-3 p-4 border-t border-white/10 bg-white/5 backdrop-blur-sm">
-          <Input
-            id="name"
-            type="text"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="Enter your message"
-            className="flex-1 text-white bg-white/10 backdrop-blur-md placeholder-white/50"
-          />
-          <Button onClick={sendMessage}>Send</Button>
-        </div>
+    <div
+      className="min-h-screen bg-cover bg-center flex items-center justify-center px-4"
+      style={{
+        backgroundImage:
+          'url("https://images.unsplash.com/photo-1498050108023-c5249f4df085")',
+      }}
+    >
+      <div className="bg-white bg-opacity-90 p-8 rounded-xl shadow-xl w-full max-w-md">
+        <h1 className="text-3xl font-bold text-center mb-6">Sign In</h1>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium">Email</label>
+            <input
+              type="email"
+              className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium">Password</label>
+            <input
+              type="password"
+              className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          {error && <p className="text-red-600 text-sm">{error}</p>}
+          <button
+            type="submit"
+            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-md font-semibold transition"
+            disabled={loading}
+          >
+            {loading ? "Signing in..." : "Sign In"}
+          </button>
+        </form>
+        <p className="mt-4 text-center text-sm">
+          Haven't created an account?{" "}
+          <a href="/auth/signup" className="text-indigo-600 hover:underline">
+            Sign Up
+          </a>
+        </p>
       </div>
     </div>
   );

@@ -29,7 +29,7 @@ export default function SignUpPage() {
       return;
     }
 
-    router.push("/auth/signin");
+    router.push("/");
   };
 
   return (
@@ -74,7 +74,7 @@ export default function SignUpPage() {
         </form>
         <p className="mt-4 text-center text-sm">
           Already have an account?{" "}
-          <a href="/auth/signin" className="text-indigo-600 hover:underline">
+          <a href="/" className="text-indigo-600 hover:underline">
             Sign In
           </a>
         </p>

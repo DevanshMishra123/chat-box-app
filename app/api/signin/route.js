@@ -17,7 +17,6 @@ export async function POST(req) {
     const users = db.collection("users");
 
     const user = await users.findOne({ email });
-
     if (!user) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
@@ -28,12 +27,12 @@ export async function POST(req) {
     }
 
     const token = sign(
-        { userId: user._id.toString(), email: user.email },
-        process.env.JWT_SECRET,
-        { expiresIn: "7d" }
+      { userId: user._id.toString(), email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
     );
 
-    const response = NextResponse.json({ message: "Login successful" });
+    const response = NextResponse.json({ message: "Login successful", user: { email: user.email } });
     response.headers.set(
       "Set-Cookie",
       serialize("token", token, {
@@ -49,9 +48,5 @@ export async function POST(req) {
   } catch (err) {
     console.error("Login error:", err);
     return NextResponse.json({ message: "Something went wrong" }, { status: 500 });
-  }finally {
-    if (client) {
-      await client.close();
-    }
   }
 }

@@ -1,9 +1,6 @@
 import { NextResponse } from "next/server";
 import { hash } from "bcryptjs";
-import { MongoClient } from "mongodb";
-
-const uri = process.env.MONGODB_URI;
-const client = new MongoClient(uri);
+import clientPromise from "@/lib/mongodb";
 
 export async function POST(req) {
   const { email, password } = await req.json();
@@ -16,7 +13,7 @@ export async function POST(req) {
   }
 
   try {
-    await client.connect();
+    const client = await clientPromise;
     const db = client.db();
     const usersCollection = db.collection("users");
 
@@ -29,7 +26,6 @@ export async function POST(req) {
     }
 
     const hashedPassword = await hash(password, 12);
-
     await usersCollection.insertOne({ email, password: hashedPassword });
 
     return NextResponse.json(
@@ -42,7 +38,5 @@ export async function POST(req) {
       { message: "Something went wrong" },
       { status: 500 }
     );
-  } finally {
-    await client.close();
   }
 }
