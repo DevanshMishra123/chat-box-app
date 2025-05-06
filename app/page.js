@@ -15,28 +15,12 @@ export default function SignInPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-    setLoading(true);
-
-    try {
-      const res = await signIn("credentials", {
-        redirect: false,
-        email,
-        password,
-        callbackUrl: "/dashboard"
-      });
-
-      if (res?.error) {
-        setError(res.error || "Invalid credentials");
-      } else {
-        console.log("login successful");
-        window.location.href = '/dashboard'
-      }
-    } catch (err) {
-      setError("An unexpected error occurred. Please try again later.");
-      console.error("Login error:", err);
-    } finally {
-      setLoading(false);
+    if(email=="test@example.com"&&password=="12345678"){
+      console.log("login successful")
+      router.replace('/dashboard')
+    }
+    else{
+      console.log("invalid credentials")
     }
   };
 
@@ -90,3 +74,27 @@ export default function SignInPage() {
     </div>
   );
 }
+/*setError("");
+    setLoading(true);
+
+    try {
+      const res = await signIn("credentials", {
+        redirect: false,
+        email,
+        password,
+        callbackUrl: "/dashboard"
+      });
+
+      if (res?.error) {
+        setError(res.error || "Invalid credentials");
+      } else {
+        console.log("login successful");
+        window.location.href = '/dashboard'
+      }
+    } catch (err) {
+      setError("An unexpected error occurred. Please try again later.");
+      console.error("Login error:", err);
+    } finally {
+      setLoading(false);
+    }
+*/
