@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+/*import { NextResponse } from "next/server";
 import { compare } from "bcryptjs";
 import { sign } from "jsonwebtoken";
 import { serialize } from "cookie";
@@ -50,3 +50,4 @@ export async function POST(req) {
     return NextResponse.json({ message: "Something went wrong" }, { status: 500 });
   }
 }
+*/
