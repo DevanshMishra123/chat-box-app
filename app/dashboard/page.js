@@ -6,23 +6,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { signOut } from "next-auth/react";
 
-const socket = io("https://chat-backend-g9v3.onrender.com");
+let socket
 
 export default function Home() {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === "Enter") {
-        if (!message) return;
-        socket.emit("send_message", message);
-        setMessages((prev) => [...prev, { message: message, type: 0 }]);
-        setMessage("");
-      }
-    };
-
-    document.addEventListener("keydown", handleKeyDown);
+    socket = io("https://chat-backend-g9v3.onrender.com");
 
     const handleReceiveMessage = (data) => {
       setMessages((prev) => [...prev, { message: data, type: 1 }]);
